@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <p>Input a number between 5 and 100 inclusive</p>
+        <input type = 'text' id = 'textID'>
+        <input type = 'button' id = 'buttonID' value = 'Go!'>
+        <p id = 'checkinput'></p>
+        <p id= 'feedback'></p>
+        <script>
+            let orderclicked = 0;
+            let arrayofbuttons = [];
+            let width = window.innerWidth;
+            let height = window.innerHeight;
+            function checkinput() { // Check user input
+                let input = parseInt(document.getElementById('textID').value);
+                if (input < 5 || input > 100) {
+                    document.getElementById('checkinput').innerHTML = 'Input not within range';
+                } else {
+                    buttonhandler(input);
+                    setTimeout(changebuttonpositionvalue, (input*1000), arrayofbuttons);
+                    setTimeout(RandomizeArrayPosition, (input*1000), arrayofbuttons);
+                    checkorderclicked(arrayofbuttons, input);
+                }
+            }
+            document.getElementById('buttonID').onclick = checkinput;
+
+            function createButton (red, green, blue) { // Create buttons
+                let btn = document.createElement('button');
+                document.body.appendChild(btn);
+                btn.style.width = 10 + 'em';
+                btn.style.height = 5 + 'em';
+                btn.style.background = 'rgb(' + red + ', ' + green + ', ' + blue + ')';
+                return btn;
+                }
+            
+            function buttonhandler (input) { // Create n number of buttons based on user input
+                for (i = 0; i < input; i++) {
+                    let x = Math.floor(Math.random() * 256);
+                    let y = Math.floor(Math.random() * 256);
+                    let z = Math.floor(Math.random() * 256);
+                    btn = createButton(x, y, z);
+                    btn.id = i;
+                    arrayofbuttons.push(btn);
+                }
+            }
+            function RandomizeArrayPosition (arrayofbuttons) { // Randomize n number of buttons 
+                for (i = 0; i < arrayofbuttons.length; i++) {
+                    arrayofbuttons[i].style.left = Math.floor(Math.random() * (width - (10*16))) + 'px';
+                    arrayofbuttons[i].style.top = Math.floor(Math.random() * (height - (5*16))) + 'px';
+                }
+            }
+
+            function changebuttonpositionvalue(arrayofbuttons) { // Change buttons position value afterwards
+                for (i = 0; i < arrayofbuttons.length; i++) {
+                    arrayofbuttons[i].style.position = 'absolute';
+                }
+            }
+
+            function checkorderclicked(arrayofbuttons, input) {
+                for (i = 0; i < arrayofbuttons.length; i++) {
+                    let userclickedbtn = arrayofbuttons[i]
+                    userclickedbtn.onclick = function () {
+                        if (userclickedbtn.id == orderclicked) {
+                            orderclicked += 1;
+                        } else {
+                            document.getElementById('feedback').innerHTML = "Wrong Order!";
+                        }
+                        if (orderclicked == input) {
+                            document.getElementById('feedback').innerHTML = "Excellent Memory!";
+                        }
+                    }
+                }
+            }            
+        </script>
+    </body>
+</html>
